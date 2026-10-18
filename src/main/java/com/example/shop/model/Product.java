@@ -1,11 +1,13 @@
 package com.example.shop.model;
 
+import com.example.shop.exceptions.OutOfStockException;
 import lombok.Getter;
 
 import static java.util.Objects.requireNonNull;
 
 @Getter
 public abstract class Product {
+
     private int id;
     private String name;
     private double price;

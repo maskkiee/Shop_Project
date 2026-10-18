@@ -1,5 +1,6 @@
 package com.example.shop.TASK1;
 
+import com.example.shop.exceptions.OutOfStockException;
 import com.example.shop.model.*;
 import com.example.shop.support.TestProducts;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ProductsTests {
+
     @Test
     void createsComputerCorrectly() {
         Computer computer = TestProducts.computers(1, 20, 50);

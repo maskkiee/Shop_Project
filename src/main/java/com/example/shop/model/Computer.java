@@ -5,6 +5,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
 public class Computer extends Product {
+
     private ComputerSpec spec;
 
     public Computer(int id, String name, double price, int stock) {

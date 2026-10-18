@@ -1,6 +1,7 @@
 package com.example.shop.model;
 
 public record Customer(String name, String email) {
+
     public Customer{
         if (name == null || name.isEmpty()){
             throw new IllegalArgumentException("Imie klienta nie może być puste");

@@ -1,6 +1,7 @@
 package com.example.shop.model;
 
 public record ComputerSpec(String cpu, int ramGB, int storageGB) {
+
     public ComputerSpec {
         if (cpu == null || cpu.isBlank()) {
             throw new IllegalArgumentException("CPU nie może być pusty ani null");

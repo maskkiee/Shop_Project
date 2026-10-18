@@ -6,6 +6,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 public record SmartphoneSpec(String color, int batteryCapacity, List<String> accesories) {
+
     public SmartphoneSpec {
         if (color == null || color.isBlank()) {
             throw new IllegalArgumentException("Kolor nie może być null ani pusty");

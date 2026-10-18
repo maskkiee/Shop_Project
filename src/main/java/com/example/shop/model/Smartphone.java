@@ -5,6 +5,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
 public class Smartphone extends Product {
+
     private SmartphoneSpec spec;
 
     public Smartphone(int id, String name, double price, int stock) {
