@@ -13,9 +13,9 @@ public class ProductManager {
     private final Map<Integer, Product> products = new LinkedHashMap<>();
 
     public void addProduct(Product product) {
-        requireNonNull(product, "Product nie może być pusty");
+        requireNonNull(product, "Product cannot be null");
         if (products.putIfAbsent((product.getId()), product) != null) {
-            throw new IllegalArgumentException("Produkt już istnieje: " + product.getId());
+            throw new IllegalArgumentException("Product already exists: " + product.getId());
         }
     }
 
@@ -27,7 +27,7 @@ public class ProductManager {
     }
 
     public void update(Product updated) {
-        requireNonNull(updated, "Produkt nie może być null");
+        requireNonNull(updated, "Produkt cannot be null");
         if (!products.containsKey(updated.getId())) {
             throw new ProductNotFoundException(updated.getId());
         }

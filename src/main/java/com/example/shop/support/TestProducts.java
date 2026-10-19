@@ -8,15 +8,15 @@ public final class TestProducts {
     }
 
     public static Smartphone smartphones(int id, double price, int stock) {
-        return new Smartphone(id, "Produkt " + id, price, stock);
+        return new Smartphone(id, "Product " + id, price, stock);
     }
 
     public static Electronics electronics(int id, double price, int stock) {
-        return new Electronics(id, "Produkt " + id, price, stock);
+        return new Electronics(id, "Product " + id, price, stock);
     }
 
     public static Computer computers(int id, double price, int stock) {
-        return new Computer(id, "Komputer " + id, price, stock);
+        return new Computer(id, "Computer " + id, price, stock);
     }
 
     public static Customer customers() {

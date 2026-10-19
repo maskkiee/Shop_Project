@@ -8,7 +8,7 @@ public class ProductNotFoundException extends RuntimeException {
     private final int productID;
 
     public ProductNotFoundException(int productID) {
-        super("Produkt nie istnieje: " + productID);
+        super("Product doesn't exist: " + productID);
         this.productID = productID;
     }
 }

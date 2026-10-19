@@ -4,14 +4,13 @@ public record ComputerSpec(String cpu, int ramGB, int storageGB) {
 
     public ComputerSpec {
         if (cpu == null || cpu.isBlank()) {
-            throw new IllegalArgumentException("CPU nie może być pusty ani null");
+            throw new IllegalArgumentException("CPU cannot be null or blank");
         }
         if (ramGB < 1) {
-            throw new IllegalArgumentException("Ram GB nie może być mniejszy niż 1GB");
+            throw new IllegalArgumentException("Ram GB cannot be less than 1GB");
         }
         if (storageGB < 1) {
-            throw new IllegalArgumentException("Storage GB nie może być mniejszy niż 1GB");
+            throw new IllegalArgumentException("Storage GB cannot be less than 1GB");
         }
-
     }
 }

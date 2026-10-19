@@ -18,7 +18,7 @@ public class Smartphone extends Product {
     }
 
     public void configure(SmartphoneSpec spec) {
-        this.spec = requireNonNull(spec, "Specyfikacja nie może być pusta");
+        this.spec = requireNonNull(spec, "Specification cannot be null");
     }
 
     public Optional<SmartphoneSpec> getSpec() {

@@ -33,14 +33,14 @@ public class ProductsTests {
     void rejectsNegativePrice() {
         assertThatThrownBy(() -> TestProducts.computers(1, -20, 50))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Cena nie może być ujemna");
+                .hasMessageContaining("Price cannot be negative");
     }
 
     @Test
     void rejectsNegativeStock() {
         assertThatThrownBy(() -> TestProducts.computers(1, 20, -50))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Ilość nie może być ujemna");
+                .hasMessageContaining("Quantity cannot be negative");
     }
 
     @Test
@@ -58,7 +58,7 @@ public class ProductsTests {
 
         assertThatThrownBy(() -> headphones.reduceStock(6))
                 .isInstanceOf(OutOfStockException.class)
-                .hasMessageContaining("Brak ilość na magazynie");
+                .hasMessageContaining("Out of stock");
     }
 
     @Test
@@ -67,10 +67,10 @@ public class ProductsTests {
 
         assertThatThrownBy(() -> headphones.reduceStock(0))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Ilość musi być dodatnia");
+                .hasMessageContaining("Quantity must be positive");
         assertThatThrownBy(() -> headphones.reduceStock(-1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Ilość musi być dodatnia");
+                .hasMessageContaining("Quantity must be positive");
     }
 
     @Test
@@ -86,29 +86,29 @@ public class ProductsTests {
     void throwsAtComputerSpecCPUNull() {
         assertThatThrownBy(() -> new ComputerSpec(null, 32, 1024))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("CPU nie może być pusty ani null");
+                .hasMessageContaining("CPU cannot be null");
     }
 
     @Test
     void throwsAtComputerSpecRamNegative() {
         assertThatThrownBy(() -> new ComputerSpec
-                ("Czarny", -5000, 1024))
+                ("Black", -5000, 1024))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Ram GB nie może być mniejszy niż 1GB");
+                .hasMessageContaining("Ram GB cannot be less than 1GB");
     }
 
     @Test
     void throwsAtComputerSpecStorageNegative() {
         assertThatThrownBy(() -> new ComputerSpec
-                ("Czarny", 5000, -1024))
+                ("Black", 5000, -1024))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Storage GB nie może być mniejszy niż 1GB");
+                .hasMessageContaining("Storage GB cannot be less than 1GB");
     }
 
     @Test
     void configureOnComputerSavesCorrectValues() {
         Computer computer = TestProducts.computers(1, 20, 50);
-        ComputerSpec spec = new ComputerSpec ("Czarny", 5000, 1024);
+        ComputerSpec spec = new ComputerSpec ("Black", 5000, 1024);
 
         computer.configure(spec);
 
@@ -121,7 +121,7 @@ public class ProductsTests {
 
         assertThatThrownBy(() -> computer.configure(null))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Specyfikacja nie może być pusta");
+                .hasMessageContaining("Specification cannot be null");
     }
     @Test
     void createsSmartphoneCorrectly() {
@@ -135,10 +135,10 @@ public class ProductsTests {
     @Test
     void smartphoneSpecProceeds() {
         SmartphoneSpec smartphoneSpecification = new SmartphoneSpec
-                ("Czarny", 5000, List.of("Etui"));
+                ("Black", 5000, List.of("Etui"));
 
         assertThat(smartphoneSpecification.accesories()).containsExactly("Etui");
-        assertThat(smartphoneSpecification.color()).isEqualTo("Czarny");
+        assertThat(smartphoneSpecification.color()).isEqualTo("Black");
         assertThat(smartphoneSpecification.batteryCapacity()).isEqualTo(5000);
     }
 
@@ -147,29 +147,29 @@ public class ProductsTests {
         assertThatThrownBy(() -> new SmartphoneSpec
                 (null, 5000, List.of("Etui")))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Kolor nie może być null ani pusty");
+                .hasMessageContaining("Color cannot be null");
     }
 
     @Test
     void throwsAtSmartphoneSpecListNull() {
         assertThatThrownBy(() -> new SmartphoneSpec
-                ("Czarny", 5000, null))
+                ("Black", 5000, null))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Accessories nie może być null ani pusty");
+                .hasMessageContaining("Accessories cannot be null");
     }
 
     @Test
     void throwsAtSmartphoneSpecCapacityNegative() {
         assertThatThrownBy(() -> new SmartphoneSpec
-                ("Czarny", -5000, List.of("Etui")))
+                ("Black", -5000, List.of("Etui")))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Pojemność baterii jest poza zakresem: ");
+                .hasMessageContaining("Battery capacity is out of range: ");
     }
 
     @Test
     void configureOnSmartphoneSavesCorrectValues() {
         Smartphone smartphone = TestProducts.smartphones(1, 20, 50);
-        SmartphoneSpec spec = new SmartphoneSpec("Czarny", 5000, List.of("Etui"));
+        SmartphoneSpec spec = new SmartphoneSpec("Black", 5000, List.of("Etui"));
 
         smartphone.configure(spec);
 
@@ -182,6 +182,6 @@ public class ProductsTests {
 
         assertThatThrownBy(() -> smartphone.configure(null))
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("Specyfikacja nie może być pusta");
+                .hasMessageContaining("Specification cannot be null");
     }
 }

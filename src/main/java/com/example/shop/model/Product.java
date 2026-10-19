@@ -14,13 +14,13 @@ public abstract class Product {
     private int stock;
 
     public Product(int id, String name, double price, int stock) {
-        this.id = requireNonNull(id, "ID nie może być puste");
-        this.name = requireNonNull(name, "Imie nie może być puste");
+        this.id = requireNonNull(id, "ID cannot be null");
+        this.name = requireNonNull(name, "Name cannot be null");
         if (price < 0) {
-            throw new IllegalArgumentException("Cena nie może być ujemna");
+            throw new IllegalArgumentException("Price cannot be negative");
         }
         if (stock < 0) {
-            throw new IllegalArgumentException("Ilość nie może być ujemna");
+            throw new IllegalArgumentException("Quantity cannot be negative");
         }
         this.price = price;
         this.stock = stock;
@@ -28,9 +28,15 @@ public abstract class Product {
 
     public abstract ProductType type();
 
+    public void ensureReadyForCart() {
+        if (stock <= 0) {
+            throw new IllegalStateException("Out of stock");
+        }
+    }
+
     public void reduceStock(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Ilość musi być dodatnia: " + amount);
+            throw new IllegalArgumentException("Quantity must be positive: " + amount);
         }
         if (amount > stock) {
             throw new OutOfStockException(name, amount, stock);

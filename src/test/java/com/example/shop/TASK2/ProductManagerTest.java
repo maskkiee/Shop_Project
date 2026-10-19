@@ -34,7 +34,7 @@ public class ProductManagerTest {
 
         assertThatThrownBy(() -> manager.addProduct(electronics))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Produkt już istnieje");
+                .hasMessageContaining("Product already exists");
     }
 
     @Test
@@ -65,14 +65,14 @@ public class ProductManagerTest {
 
         assertThatThrownBy(() -> manager.update(computerUpdated))
                 .isInstanceOf(ProductNotFoundException.class)
-                .hasMessageContaining("Produkt nie istnieje: ");
+                .hasMessageContaining("Product doesn't exist: ");
     }
 
     @Test
     void throwsWhenRemovingMissingProduct() {
         assertThatThrownBy(() -> manager.removeProduct(1))
                 .isInstanceOf(ProductNotFoundException.class)
-                .hasMessageContaining("Produkt nie istnieje: ");
+                .hasMessageContaining("Product doesn't exist: ");
     }
 
     @Test
