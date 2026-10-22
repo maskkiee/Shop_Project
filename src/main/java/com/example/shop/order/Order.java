@@ -1,6 +1,7 @@
 package com.example.shop.order;
 
 import com.example.shop.model.Customer;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.time.OffsetDateTime;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+@Getter
 public class Order {
 
     public static final ZoneId SHOP_ZONE =  ZoneId.of("Europe/Warsaw");

@@ -22,20 +22,30 @@ public class Cart {
                 () -> items.add(new CartItem(product, quantity)));
     }
 
-    public List<CartItem> getItems() {
-        return List.copyOf(items);
-    }
-
     public double getTotal() {
         return items.stream().mapToDouble(item ->
                 item.getProduct().getPrice() * item.getQuantity()).sum();
     }
 
-    public void clear() {
-        items.clear();
+    public static Cart addToCart(Product product, int quantity) {
+        Cart cart = new Cart();
+        cart.addItem(product, quantity);
+        return cart;
     }
 
     public Optional<CartItem> findItem(Product product) {
         return items.stream().filter(item -> item.getProduct() == product).findFirst();
+    }
+
+    public List<CartItem> getItems() {
+        return List.copyOf(items);
+    }
+
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
+
+    public void clear() {
+        items.clear();
     }
 }
