@@ -1,6 +1,6 @@
 package com.example.shop.TASK2;
 
-import com.example.shop.catalog.ProductManager;
+import com.example.shop.model.ProductManager;
 import com.example.shop.exceptions.ProductNotFoundException;
 import com.example.shop.model.Computer;
 import com.example.shop.model.Electronics;

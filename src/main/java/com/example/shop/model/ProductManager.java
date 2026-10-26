@@ -1,8 +1,6 @@
-package com.example.shop.catalog;
+package com.example.shop.model;
 
 import com.example.shop.exceptions.ProductNotFoundException;
-import com.example.shop.model.Product;
-import com.example.shop.model.ProductType;
 
 import java.util.*;
 
