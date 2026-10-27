@@ -2,6 +2,7 @@ package com.example.shop.app;
 
 import com.example.shop.CLI.ShopCli;
 import com.example.shop.cart.Cart;
+import com.example.shop.files.FileOrderRepository;
 import com.example.shop.model.Computer;
 import com.example.shop.model.Electronics;
 import com.example.shop.model.ProductManager;
@@ -11,6 +12,7 @@ import com.example.shop.order.InvoiceGenerator;
 import com.example.shop.order.OrderProcessor;
 import com.example.shop.persistance.OrderRepository;
 
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class ShopApplication {
@@ -19,7 +21,9 @@ public class ShopApplication {
     }
 
     public static void main(String[] args) {
-        InMemoryOrderRepository repository = new InMemoryOrderRepository();
+        var ordersFile = Paths.get("C:/Users/mask/Documents/ShopProject/orders.txt");
+        var invoiceDir = Paths.get("C:/Users/mask/Documents/ShopProject/invoices");
+        OrderRepository repository = new FileOrderRepository(ordersFile, invoiceDir);
         OrderProcessor processor = new OrderProcessor(new InvoiceGenerator(), repository);
         try (Scanner scanner = new Scanner(System.in)) {
             new ShopCli(scanner, sampleCatalog(), new Cart(), processor).run();
