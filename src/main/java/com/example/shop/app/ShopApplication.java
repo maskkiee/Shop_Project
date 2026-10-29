@@ -21,8 +21,8 @@ public class ShopApplication {
     }
 
     public static void main(String[] args) {
-        var ordersFile = Paths.get("C:/Users/mask/Documents/ShopProject/orders.txt");
-        var invoiceDir = Paths.get("C:/Users/mask/Documents/ShopProject/invoices");
+        var ordersFile = Paths.get("C:/Users/mask/Projects/Shop_Project/orders.txt");
+        var invoiceDir = Paths.get("C:/Users/mask/Projects/Shop_Project/invoices");
         OrderRepository repository = new FileOrderRepository(ordersFile, invoiceDir);
         OrderProcessor processor = new OrderProcessor(new InvoiceGenerator(), repository);
         try (Scanner scanner = new Scanner(System.in)) {
