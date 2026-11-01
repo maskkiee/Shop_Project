@@ -1,6 +1,6 @@
 package com.example.shop.order;
 
-import com.example.shop.persistance.OrderRepository;
+import com.example.shop.persistence.OrderRepository;
 
 import java.util.*;
 

@@ -32,7 +32,7 @@ public class ProductManager {
         products.put(updated.getId(), updated);
     }
 
-    public Optional<Product> findByID(int productID) {
+    public Optional<Product> findById(int productID) {
         return Optional.ofNullable(products.get(productID));
     }
 
@@ -45,4 +45,3 @@ public class ProductManager {
                 .filter(product -> product.type() == type).toList();
     }
 }
-

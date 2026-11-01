@@ -5,6 +5,7 @@ import com.example.shop.model.Customer;
 import com.example.shop.order.InMemoryOrderRepository;
 import com.example.shop.order.InvoiceGenerator;
 import com.example.shop.order.OrderProcessor;
+import com.example.shop.promo.PromoService;
 import com.example.shop.support.TestProducts;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +19,9 @@ public class OrderProcessorAsyncTest {
 
     private static final int ORDER_COUNT = 100;
 
+    private final PromoService promos = TestProducts.samplePromos();
     private final InMemoryOrderRepository repository = new InMemoryOrderRepository();
-    private final OrderProcessor processor = new OrderProcessor(new InvoiceGenerator(), repository);
+    private final OrderProcessor processor = new OrderProcessor(new InvoiceGenerator(), repository, promos);
 
     @Test
     public void asyncProcessingIsFasterThanSync() {

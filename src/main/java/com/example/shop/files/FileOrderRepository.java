@@ -2,7 +2,7 @@ package com.example.shop.files;
 
 import com.example.shop.exceptions.OrderProcessingException;
 import com.example.shop.order.Order;
-import com.example.shop.persistance.OrderRepository;
+import com.example.shop.persistence.OrderRepository;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

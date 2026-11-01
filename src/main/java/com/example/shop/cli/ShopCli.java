@@ -1,4 +1,4 @@
-package com.example.shop.CLI;
+package com.example.shop.cli;
 
 import com.example.shop.cart.Cart;
 import com.example.shop.model.Customer;
@@ -67,7 +67,7 @@ public class ShopCli {
     private void addProductToCart() {
         System.out.println("Please enter the product ID: ");
         int productId = Integer.parseInt(readLine());
-        Product product = manager.findByID(productId).orElse(null);
+        Product product = manager.findById(productId).orElse(null);
         if (product == null) {
             System.out.println("Product with ID: " + productId + " not found");
             return;
@@ -76,7 +76,7 @@ public class ShopCli {
             cart.addItem(product, readQuantity());
             System.out.println("Product " + productId + " added to cart.");
         } catch (RuntimeException e) {
-            System.out.println("Product with ID: " + productId + " cannot be added");
+            System.out.println(e.getMessage() + productId + " cannot be added");
         }
     }
 
@@ -96,9 +96,11 @@ public class ShopCli {
             System.out.println("Cart is empty.");
             return;
         }
+
         Customer customer = new Customer(promptText("Name: "), promptText("Email: "));
+        String promocode = promptText("Promocode: ");
         try {
-            Order order = processor.process(cart, customer);
+            Order order = processor.process(cart, customer, promocode);
             System.out.printf("Order: %s Total: %.2f zł%n",
                     order.getId(), order.getTotal());
         } catch (RuntimeException e) {

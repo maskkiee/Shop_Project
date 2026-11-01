@@ -1,4 +1,4 @@
-package com.example.shop.persistance;
+package com.example.shop.persistence;
 
 import com.example.shop.order.Order;
 

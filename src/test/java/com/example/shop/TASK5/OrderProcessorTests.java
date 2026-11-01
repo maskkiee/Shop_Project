@@ -8,6 +8,7 @@ import com.example.shop.order.InMemoryOrderRepository;
 import com.example.shop.order.InvoiceGenerator;
 import com.example.shop.order.Order;
 import com.example.shop.order.OrderProcessor;
+import com.example.shop.promo.PromoService;
 import com.example.shop.support.TestProducts;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +19,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class OrderProcessorTests {
 
+    private final PromoService promos = TestProducts.samplePromos();
     private final InMemoryOrderRepository repository = new InMemoryOrderRepository();
     private final OrderProcessor processor =
-            new OrderProcessor(new InvoiceGenerator(), repository);
+            new OrderProcessor(new InvoiceGenerator(), repository, promos);
 
     @Test
     public void createsOrderAndInvoice() {
@@ -57,6 +59,5 @@ public class OrderProcessorTests {
 
         assertThat(computer.getStock()).isEqualTo(1);
         assertThat(repository.findAll()).isEmpty();
-
     }
 }

@@ -4,6 +4,7 @@ import com.example.shop.cart.Cart;
 import com.example.shop.files.FileOrderRepository;
 import com.example.shop.model.Computer;
 import com.example.shop.order.*;
+import com.example.shop.promo.PromoService;
 import com.example.shop.support.TestProducts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

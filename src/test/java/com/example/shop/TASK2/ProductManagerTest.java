@@ -21,7 +21,7 @@ public class ProductManagerTest {
 
         manager.addProduct(computer);
 
-        assertThat(manager.findByID(1)).contains(computer);
+        assertThat(manager.findById(1)).contains(computer);
         assertThat(manager.findAll().size()).isEqualTo(1);
     }
 
@@ -55,7 +55,7 @@ public class ProductManagerTest {
         manager.addProduct(computer);
         manager.update(computerUpdated);
 
-        assertThat(manager.findByID(1)).contains(computerUpdated);
+        assertThat(manager.findById(1)).contains(computerUpdated);
         assertThat(computerUpdated.getPrice()).isEqualTo(40.0);
     }
 
