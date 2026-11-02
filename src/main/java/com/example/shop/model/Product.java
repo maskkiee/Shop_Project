@@ -3,6 +3,8 @@ package com.example.shop.model;
 import com.example.shop.exceptions.OutOfStockException;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 import static java.util.Objects.requireNonNull;
 
 @Getter
@@ -10,17 +12,17 @@ public abstract class Product {
 
     private int id;
     private String name;
-    private double price;
+    private BigDecimal price;
     private int stock;
 
-    public Product(int id, String name, double price, int stock) {
+    public Product(int id, String name, BigDecimal price, int stock) {
         this.id = requireNonNull(id, "ID cannot be null");
         this.name = requireNonNull(name, "Name cannot be null");
-        if (price < 0) {
+        if (price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
-        if (stock < 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative");
+        if (stock <= 0) {
+            throw new IllegalArgumentException("Quantity must be positive");
         }
         this.price = price;
         this.stock = stock;

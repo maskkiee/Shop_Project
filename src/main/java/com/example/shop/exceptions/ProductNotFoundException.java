@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class ProductNotFoundException extends RuntimeException {
 
-    private final int productID;
+    private final int productId;
 
-    public ProductNotFoundException(int productID) {
-        super("Product doesn't exist: " + productID);
-        this.productID = productID;
+    public ProductNotFoundException(int productId) {
+        super("Product doesn't exist: " + productId);
+        this.productId = productId;
     }
 }

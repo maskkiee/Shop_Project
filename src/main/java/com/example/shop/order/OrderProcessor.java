@@ -9,6 +9,7 @@ import com.example.shop.model.Product;
 import com.example.shop.persistence.OrderRepository;
 import com.example.shop.promo.PromoService;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -43,16 +44,16 @@ public class OrderProcessor {
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
-    public Order process (Cart cart, Customer customer, String promoCode){
-        double total = promoService.applyTo(promoCode, cart.getTotal());
+    public Order process(Cart cart, Customer customer, String promoCode) {
+        BigDecimal total = promoService.applyTo(promoCode, cart.getTotal());
         return createOrder(cart, customer, total);
     }
 
-    public Order process (Cart cart, Customer customer){
+    public Order process(Cart cart, Customer customer) {
         return createOrder(cart, customer, cart.getTotal());
     }
 
-    private Order createOrder(Cart cart, Customer customer, double total) {
+    private Order createOrder(Cart cart, Customer customer, BigDecimal total) {
         if (cart.isEmpty()) {
             throw new OrderProcessingException("Cart is empty");
         }
@@ -65,7 +66,7 @@ public class OrderProcessor {
         return order;
     }
 
-    public void processAsync(List<Cart> carts, List<Customer> customers){
+    public void processAsync(List<Cart> carts, List<Customer> customers) {
         List<CompletableFuture<Order>> futures = IntStream.range(0, carts.size())
                 .mapToObj(i -> CompletableFuture.supplyAsync(() ->
                         process(carts.get(i), customers.get(i)), executorService))
@@ -85,8 +86,8 @@ public class OrderProcessor {
         cart.getItems().forEach(item -> item.getProduct().reduceStock(item.getQuantity()));
     }
 
-    private void emulateExternalWork(){
-        try{
+    private void emulateExternalWork() {
+        try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

@@ -10,30 +10,30 @@ public class ProductManager {
 
     private final Map<Integer, Product> products = new LinkedHashMap<>();
 
-    public void addProduct(Product product) {
+    public void add(Product product) {
         requireNonNull(product, "Product cannot be null");
         if (products.putIfAbsent((product.getId()), product) != null) {
             throw new IllegalArgumentException("Product already exists: " + product.getId());
         }
     }
 
-    public void removeProduct(int productID) {
-        Product removed = products.remove(productID);
+    public void remove(int productId) {
+        Product removed = products.remove(productId);
         if (removed == null) {
-            throw new ProductNotFoundException(productID);
+            throw new ProductNotFoundException(productId);
         }
     }
 
     public void update(Product updated) {
-        requireNonNull(updated, "Produkt cannot be null");
+        requireNonNull(updated, "Product cannot be null");
         if (!products.containsKey(updated.getId())) {
             throw new ProductNotFoundException(updated.getId());
         }
         products.put(updated.getId(), updated);
     }
 
-    public Optional<Product> findById(int productID) {
-        return Optional.ofNullable(products.get(productID));
+    public Optional<Product> findById(int productId) {
+        return Optional.ofNullable(products.get(productId));
     }
 
     public List<Product> findAll() {

@@ -11,8 +11,8 @@ import com.example.shop.order.InvoiceGenerator;
 import com.example.shop.order.OrderProcessor;
 import com.example.shop.persistence.OrderRepository;
 import com.example.shop.promo.PromoService;
-import com.example.shop.support.TestProducts;
 
+import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -24,7 +24,7 @@ public class ShopApplication {
     public static void main(String[] args) {
         var ordersFile = Paths.get("orders.txt");
         var invoiceDir = Paths.get("invoices");
-        PromoService promoService = TestProducts.samplePromos();
+        PromoService promoService = promoServiceRegister("START10", new BigDecimal("0.1"));
         OrderRepository repository = new FileOrderRepository(ordersFile, invoiceDir);
         OrderProcessor processor = new OrderProcessor(new InvoiceGenerator(), repository, promoService);
         try (Scanner scanner = new Scanner(System.in)) {
@@ -34,10 +34,16 @@ public class ShopApplication {
 
     private static ProductManager sampleCatalog() {
         ProductManager manager = new ProductManager();
-        manager.addProduct(new Computer(1, "Computer", 7999.0, 5));
-        manager.addProduct(new Smartphone(2, "Smartphone", 3499.0, 12));
-        manager.addProduct(new Electronics(3, "Headphones", 299.0, 30));
-        manager.addProduct(new Electronics(4, "Keyboard", 449.0, 18));
+        manager.add(new Computer(1, "Computer", new BigDecimal("7999.0"), 5));
+        manager.add(new Smartphone(2, "Smartphone", new BigDecimal("7499.0"), 12));
+        manager.add(new Electronics(3, "Headphones", new BigDecimal("299.0"), 30));
+        manager.add(new Electronics(4, "Keyboard", new BigDecimal("449.0"), 18));
         return manager;
+    }
+
+    private static PromoService promoServiceRegister(String code, BigDecimal promoPercentage) {
+        PromoService promoService = new PromoService();
+        promoService.register(code, promoPercentage);
+        return promoService;
     }
 }

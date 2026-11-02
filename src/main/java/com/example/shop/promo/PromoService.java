@@ -1,30 +1,31 @@
 package com.example.shop.promo;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PromoService {
 
-    private static final double FULL_PRICE = 1.00;
-    private static final double NO_DISCOUNT = 0.00;
+    private static final BigDecimal FULL_PRICE = BigDecimal.ONE;
+    private static final BigDecimal NO_DISCOUNT = new BigDecimal("0.00");
 
-    private final Map<String, Double> promos = new HashMap<>();
+    private final Map<String, BigDecimal> promos = new HashMap<>();
 
-    public void register(String code, double promo) {
+    public void register(String code, BigDecimal promo) {
         if (code == null || code.isBlank()) {
             throw new IllegalArgumentException("Code cannot be blank");
         }
-        if (promo >= FULL_PRICE || promo <= NO_DISCOUNT) {
+        if (promo.compareTo(FULL_PRICE) >= 0 || promo.compareTo(NO_DISCOUNT) <= 0) {
             throw new IllegalArgumentException("Promo exceeds price limit");
         }
         promos.put(code.toUpperCase(), promo);
     }
 
-    public double applyTo(String code, double total) {
+    public BigDecimal applyTo(String code, BigDecimal total) {
         if (code == null || code.isBlank()) {
             return total;
         }
-        double discount = promos.getOrDefault(code.toUpperCase(), NO_DISCOUNT);
-        return total * (FULL_PRICE - discount);
+        BigDecimal discount = promos.getOrDefault(code.toUpperCase(), NO_DISCOUNT);
+        return total.multiply(FULL_PRICE.subtract(discount));
     }
 }

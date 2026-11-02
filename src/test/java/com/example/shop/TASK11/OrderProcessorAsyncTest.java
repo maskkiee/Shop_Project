@@ -2,17 +2,18 @@ package com.example.shop.TASK11;
 
 import com.example.shop.cart.Cart;
 import com.example.shop.model.Customer;
-import com.example.shop.order.InMemoryOrderRepository;
+import com.example.shop.persistence.InMemoryOrderRepository;
 import com.example.shop.order.InvoiceGenerator;
 import com.example.shop.order.OrderProcessor;
 import com.example.shop.promo.PromoService;
 import com.example.shop.support.TestProducts;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static com.example.shop.cart.Cart.addToCart;
+import static com.example.shop.support.TestProducts.addToCart;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OrderProcessorAsyncTest {
@@ -49,7 +50,7 @@ public class OrderProcessorAsyncTest {
 
     private List<Cart> generateCarts() {
         return IntStream.range(0, OrderProcessorAsyncTest.ORDER_COUNT)
-                .mapToObj(i -> addToCart(TestProducts.electronics(i + 1, 10.0, 5), 1))
+                .mapToObj(i -> addToCart(TestProducts.electronics(i + 1, BigDecimal.valueOf(10.0), 5), 1))
                 .toList();
     }
 

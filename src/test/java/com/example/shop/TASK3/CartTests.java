@@ -6,6 +6,8 @@ import com.example.shop.model.Computer;
 import com.example.shop.support.TestProducts;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -15,37 +17,37 @@ public class CartTests {
 
     @Test
     void addToCartCorrectlyAndFindsAndTotals() {
-        Computer computer = TestProducts.computers(1, 20, 50);
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
 
         cart.addItem(computer, 1);
 
         assertThat(cart.findItem(computer)).isPresent();
-        assertThat(cart.getTotal()).isEqualTo(20);
+        assertThat(cart.getTotal()).isEqualByComparingTo(BigDecimal.valueOf(20));
         assertThat(cart.getItems().size()).isEqualTo(1);
     }
 
     @Test
-    void addsProductAndComputesTotal(){
-        Computer computer = TestProducts.computers(1, 20, 50);
+    void addsProductAndComputesTotal() {
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
 
         cart.addItem(computer, 2);
         cart.addItem(computer, 4);
 
-        assertThat(cart.getItems().get(0).getQuantity()).isEqualTo(6);
+        assertThat(cart.getItems().getFirst().getQuantity()).isEqualTo(6);
     }
 
     @Test
-    void rejectsNotPositiveQuantity(){
-        Computer computer = TestProducts.computers(1, 20, 50);
+    void rejectsNotPositiveQuantity() {
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
 
         assertThatThrownBy(() -> cart.addItem(computer, -1))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Quantity cannot be negative");
+                .hasMessageContaining("Quantity must be positive");
     }
 
     @Test
     void increasesQuantityWhenAddQuantityCalled() {
-        Computer computer = TestProducts.computers(1, 20, 50);
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
         CartItem item = new CartItem(computer, 2);
 
         item.addQuantity(3);
@@ -55,7 +57,7 @@ public class CartTests {
 
     @Test
     void throwsAtNegativeQuantityWhenAddQuantityCalled() {
-        Computer computer = TestProducts.computers(1, 20, 50);
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
         CartItem item = new CartItem(computer, 2);
 
         assertThatThrownBy(() -> item.addQuantity(0))
@@ -65,7 +67,7 @@ public class CartTests {
 
     @Test
     void clearsCartCorrectly() {
-        Computer computer = TestProducts.computers(1, 20, 50);
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
         cart.addItem(computer, 1);
 
         cart.clear();

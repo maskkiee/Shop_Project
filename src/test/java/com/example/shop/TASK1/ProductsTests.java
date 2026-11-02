@@ -5,6 +5,7 @@ import com.example.shop.model.*;
 import com.example.shop.support.TestProducts;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,10 +15,10 @@ public class ProductsTests {
 
     @Test
     void createsComputerCorrectly() {
-        Computer computer = TestProducts.computers(1, 20, 50);
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
 
         assertThat(computer.getId()).isEqualTo(1);
-        assertThat(computer.getPrice()).isEqualTo(20.0);
+        assertThat(computer.getPrice()).isEqualByComparingTo(BigDecimal.valueOf(20));
         assertThat(computer.getStock()).isEqualTo(50);
     }
 
@@ -31,21 +32,21 @@ public class ProductsTests {
 
     @Test
     void rejectsNegativePrice() {
-        assertThatThrownBy(() -> TestProducts.computers(1, -20, 50))
+        assertThatThrownBy(() -> TestProducts.computers(1, BigDecimal.valueOf(-20), 50))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Price cannot be negative");
     }
 
     @Test
     void rejectsNegativeStock() {
-        assertThatThrownBy(() -> TestProducts.computers(1, 20, -50))
+        assertThatThrownBy(() -> TestProducts.computers(1, BigDecimal.valueOf(20), -50))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Quantity cannot be negative");
+                .hasMessageContaining("Quantity must be positive");
     }
 
     @Test
     void decreasesStockByRequest() {
-        Electronics headphones = TestProducts.electronics(1, 20, 50);
+        Electronics headphones = TestProducts.electronics(1, BigDecimal.valueOf(20), 50);
 
         headphones.reduceStock(1);
 
@@ -54,7 +55,7 @@ public class ProductsTests {
 
     @Test
     void throwsExceptionAtStockBelowZero() {
-        Electronics headphones = TestProducts.electronics(1, 20, 5);
+        Electronics headphones = TestProducts.electronics(1, BigDecimal.valueOf(20), 5);
 
         assertThatThrownBy(() -> headphones.reduceStock(6))
                 .isInstanceOf(OutOfStockException.class)
@@ -63,7 +64,7 @@ public class ProductsTests {
 
     @Test
     void rejectsNonPositiveRequestForStock() {
-        Electronics headphones = TestProducts.electronics(1, 20, 5);
+        Electronics headphones = TestProducts.electronics(1, BigDecimal.valueOf(20), 5);
 
         assertThatThrownBy(() -> headphones.reduceStock(0))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -107,8 +108,8 @@ public class ProductsTests {
 
     @Test
     void configureOnComputerSavesCorrectValues() {
-        Computer computer = TestProducts.computers(1, 20, 50);
-        ComputerSpec spec = new ComputerSpec ("Black", 5000, 1024);
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
+        ComputerSpec spec = new ComputerSpec("Black", 5000, 1024);
 
         computer.configure(spec);
 
@@ -117,18 +118,19 @@ public class ProductsTests {
 
     @Test
     void configureOnComputerThrowsAtNull() {
-        Computer computer = TestProducts.computers(1, 20, 50);
+        Computer computer = TestProducts.computers(1, BigDecimal.valueOf(20), 50);
 
         assertThatThrownBy(() -> computer.configure(null))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("Specification cannot be null");
     }
+
     @Test
     void createsSmartphoneCorrectly() {
-        Smartphone smartphone = TestProducts.smartphones(1, 20, 50);
+        Smartphone smartphone = TestProducts.smartphones(1, BigDecimal.valueOf(20), 50);
 
         assertThat(smartphone.getId()).isEqualTo(1);
-        assertThat(smartphone.getPrice()).isEqualTo(20.0);
+        assertThat(smartphone.getPrice()).isEqualByComparingTo(BigDecimal.valueOf(20));
         assertThat(smartphone.getStock()).isEqualTo(50);
     }
 
@@ -137,7 +139,7 @@ public class ProductsTests {
         SmartphoneSpec smartphoneSpecification = new SmartphoneSpec
                 ("Black", 5000, List.of("Etui"));
 
-        assertThat(smartphoneSpecification.accesories()).containsExactly("Etui");
+        assertThat(smartphoneSpecification.accessories()).containsExactly("Etui");
         assertThat(smartphoneSpecification.color()).isEqualTo("Black");
         assertThat(smartphoneSpecification.batteryCapacity()).isEqualTo(5000);
     }
@@ -168,7 +170,7 @@ public class ProductsTests {
 
     @Test
     void configureOnSmartphoneSavesCorrectValues() {
-        Smartphone smartphone = TestProducts.smartphones(1, 20, 50);
+        Smartphone smartphone = TestProducts.smartphones(1, BigDecimal.valueOf(20), 50);
         SmartphoneSpec spec = new SmartphoneSpec("Black", 5000, List.of("Etui"));
 
         smartphone.configure(spec);
@@ -178,7 +180,7 @@ public class ProductsTests {
 
     @Test
     void configureOnSmartphoneThrowsAtNull() {
-        Smartphone smartphone = TestProducts.smartphones(1, 20, 50);
+        Smartphone smartphone = TestProducts.smartphones(1, BigDecimal.valueOf(20), 50);
 
         assertThatThrownBy(() -> smartphone.configure(null))
                 .isInstanceOf(NullPointerException.class)

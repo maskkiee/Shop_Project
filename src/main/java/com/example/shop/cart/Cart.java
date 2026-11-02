@@ -2,6 +2,7 @@ package com.example.shop.cart;
 
 import com.example.shop.model.Product;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,21 +17,17 @@ public class Cart {
         requireNonNull(product, "Product cannot be null");
         product.ensureReadyForCart();
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative: " + quantity);
+            throw new IllegalArgumentException("Quantity must be positive: " + quantity);
         }
         findItem(product).ifPresentOrElse(item -> item.addQuantity(quantity),
                 () -> items.add(new CartItem(product, quantity)));
     }
 
-    public double getTotal() {
-        return items.stream().mapToDouble(item ->
-                item.getProduct().getPrice() * item.getQuantity()).sum();
-    }
-
-    public static Cart addToCart(Product product, int quantity) {
-        Cart cart = new Cart();
-        cart.addItem(product, quantity);
-        return cart;
+    public BigDecimal getTotal() {
+        return items.stream()
+                .map(item -> item.getProduct().getPrice()
+                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public Optional<CartItem> findItem(Product product) {

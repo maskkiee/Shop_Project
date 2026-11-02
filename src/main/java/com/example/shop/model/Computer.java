@@ -1,5 +1,6 @@
 package com.example.shop.model;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -8,7 +9,7 @@ public class Computer extends Product {
 
     private ComputerSpec spec;
 
-    public Computer(int id, String name, double price, int stock) {
+    public Computer(int id, String name, BigDecimal price, int stock) {
         super(id, name, price, stock);
     }
 

@@ -7,6 +7,8 @@ import com.example.shop.model.ProductManager;
 import com.example.shop.order.Order;
 import com.example.shop.order.OrderProcessor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 
 public class ShopCli {
@@ -85,10 +87,11 @@ public class ShopCli {
             System.out.println("Cart is empty.");
             return;
         }
-        cart.getItems().forEach(item -> System.out.printf("  %s x%d = %.2f zł%n",
+        cart.getItems().forEach(item -> System.out.printf("  %s x%d = %s zł%n",
                 item.getProduct().getName(), item.getQuantity(),
-                item.getProduct().getPrice() * item.getQuantity()));
-        System.out.printf("Total: %.2f zł%n", cart.getTotal());
+                item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity()))
+                        .setScale(2, RoundingMode.HALF_UP)));
+        System.out.printf("Total: %s zł%n", cart.getTotal());
     }
 
     private void checkout() {
@@ -98,18 +101,19 @@ public class ShopCli {
         }
 
         Customer customer = new Customer(promptText("Name: "), promptText("Email: "));
-        String promocode = promptText("Promocode: ");
+        String promoCode = promptText("Promo code: ");
         try {
-            Order order = processor.process(cart, customer, promocode);
-            System.out.printf("Order: %s Total: %.2f zł%n",
-                    order.getId(), order.getTotal());
+            Order order = processor.process(cart, customer, promoCode);
+            System.out.printf("Order: %s Total: %s zł%n",
+                    order.getId(),
+                    order.getTotal().setScale(2, RoundingMode.HALF_UP));
         } catch (RuntimeException e) {
             System.out.println("Order couldn't be completed: " + e.getMessage());
         }
     }
 
     private int readQuantity() {
-        System.out.println ("Please enter the quantity to checkout: ");
+        System.out.println("Please enter the quantity to checkout: ");
         return Integer.parseInt(readLine());
     }
 

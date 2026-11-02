@@ -5,6 +5,7 @@ import com.example.shop.order.Order;
 import com.example.shop.persistence.OrderRepository;
 
 import java.io.IOException;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,7 +48,7 @@ public class FileOrderRepository implements OrderRepository {
         return String.join("|",
                 order.getId(),
                 order.getCustomer().email(),
-                String.format("%.2f", order.getTotal()),
+                order.getTotal().setScale(2, RoundingMode.HALF_UP).toString(),
                 order.getCreatedAt().toString());
     }
 }
