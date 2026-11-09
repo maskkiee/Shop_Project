@@ -11,6 +11,7 @@ import com.example.shop.promo.PromoService;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +31,16 @@ public class OrderProcessor {
     private final AtomicInteger sequence = new AtomicInteger();
     private final ExecutorService executorService;
     private PromoService promoService;
+
+    private final List<OrderObserver> observers = new ArrayList<>();
+
+    public void addObserver(OrderObserver observer) {
+        observers.add(observer);
+    }
+
+    private void notifyObservers(Order order) {
+        observers.forEach(observer -> observer.onOrderPlaced(order));
+    }
 
     public OrderProcessor(InvoiceGenerator invoiceGenerator, OrderRepository repository) {
         this.invoiceGenerator = requireNonNull(invoiceGenerator, "Invoice Generator cannot be null");
@@ -53,15 +64,22 @@ public class OrderProcessor {
         return createOrder(cart, customer, cart.getTotal());
     }
 
+    //Builder
     private Order createOrder(Cart cart, Customer customer, BigDecimal total) {
         if (cart.isEmpty()) {
             throw new OrderProcessingException("Cart is empty");
         }
         reserveStock(cart);
         emulateExternalWork();
-        Order order = new Order(nextId(), customer, toOrderItems(cart), total,
-                OffsetDateTime.now(Order.SHOP_ZONE));
+        Order order = Order.builder()
+                .id(nextId())
+                .customer(customer)
+                .items(toOrderItems(cart))
+                .total(total)
+                .createdAt(OffsetDateTime.now(Order.SHOP_ZONE))
+                .build();
         repository.save(order, invoiceGenerator.generate(order));
+        notifyObservers(order);
         cart.clear();
         return order;
     }

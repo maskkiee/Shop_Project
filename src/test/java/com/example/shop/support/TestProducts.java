@@ -11,6 +11,7 @@ public final class TestProducts {
     private TestProducts() {
     }
 
+    //Fabric methods
     public static Smartphone smartphones(int id, BigDecimal price, int stock) {
         return new Smartphone(id, "Product " + id, price, stock);
     }

@@ -63,8 +63,13 @@ public class FilesTests {
     }
 
     private Order order(String id) {
-        return new Order(id, customers(),
-                List.of(new OrderItem("1", "Laptop", new BigDecimal("4000"), 1)),
-                new BigDecimal("4000"), OffsetDateTime.now());
+        OrderItem item = new OrderItem("1", "Laptop", new BigDecimal("4000"), 1);
+        return Order.builder()
+                .id(id)
+                .customer(customers())
+                .items(List.of(item))
+                .total(item.totalPrice())
+                .createdAt(OffsetDateTime.now(Order.SHOP_ZONE))
+                .build();
     }
 }

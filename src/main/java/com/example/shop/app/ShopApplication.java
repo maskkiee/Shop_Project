@@ -7,7 +7,9 @@ import com.example.shop.model.Computer;
 import com.example.shop.model.Electronics;
 import com.example.shop.model.ProductManager;
 import com.example.shop.model.Smartphone;
+import com.example.shop.order.EmailNotifier;
 import com.example.shop.order.InvoiceGenerator;
+import com.example.shop.order.OrderLogger;
 import com.example.shop.order.OrderProcessor;
 import com.example.shop.persistence.OrderRepository;
 import com.example.shop.promo.PromoService;
@@ -27,6 +29,8 @@ public class ShopApplication {
         PromoService promoService = promoServiceRegister("START10", new BigDecimal("0.1"));
         OrderRepository repository = new FileOrderRepository(ordersFile, invoiceDir);
         OrderProcessor processor = new OrderProcessor(new InvoiceGenerator(), repository, promoService);
+        processor.addObserver(new EmailNotifier());
+        processor.addObserver(new OrderLogger());
         try (Scanner scanner = new Scanner(System.in)) {
             new ShopCli(scanner, sampleCatalog(), new Cart(), processor).run();
         }
@@ -34,10 +38,10 @@ public class ShopApplication {
 
     private static ProductManager sampleCatalog() {
         ProductManager manager = new ProductManager();
-        manager.add(new Computer(1, "Computer", new BigDecimal("7999.0"), 5));
-        manager.add(new Smartphone(2, "Smartphone", new BigDecimal("7499.0"), 12));
-        manager.add(new Electronics(3, "Headphones", new BigDecimal("299.0"), 30));
-        manager.add(new Electronics(4, "Keyboard", new BigDecimal("449.0"), 18));
+        manager.add(new Computer(1, "Computer", new BigDecimal("7999.00"), 5));
+        manager.add(new Smartphone(2, "Smartphone", new BigDecimal("7499.00"), 12));
+        manager.add(new Electronics(3, "Headphones", new BigDecimal("299.00"), 30));
+        manager.add(new Electronics(4, "Keyboard", new BigDecimal("449.00"), 18));
         return manager;
     }
 

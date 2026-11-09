@@ -11,6 +11,7 @@ public class PromoService {
 
     private final Map<String, BigDecimal> promos = new HashMap<>();
 
+    //Strategy
     public void register(String code, BigDecimal promo) {
         if (code == null || code.isBlank()) {
             throw new IllegalArgumentException("Code cannot be blank");
