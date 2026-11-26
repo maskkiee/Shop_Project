@@ -6,6 +6,10 @@ import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Działania na produktach, dodanie produktu do puli, usunięcie go lub zaktualizowanie.
+ * Rzuca wyjątki ProductNotFoundException gdy wskazano na nieistniejący produkt.
+ */
 public class ProductManager {
 
     private final Map<Integer, Product> products = new LinkedHashMap<>();

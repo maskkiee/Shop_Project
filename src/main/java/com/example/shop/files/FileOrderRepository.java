@@ -13,6 +13,10 @@ import java.nio.file.StandardOpenOption;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Zapis zamówień do pliku. Jedna linia w orders.txt
+ * oraz osobny plik faktury invoice-<id>.txt w katalogu faktur.
+ */
 public class FileOrderRepository implements OrderRepository {
 
     private static final String INVOICE_PREFIX = "invoice-";

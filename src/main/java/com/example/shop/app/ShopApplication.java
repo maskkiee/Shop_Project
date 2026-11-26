@@ -33,6 +33,8 @@ public class ShopApplication {
         processor.addObserver(new OrderLogger());
         try (Scanner scanner = new Scanner(System.in)) {
             new ShopCli(scanner, sampleCatalog(), new Cart(), processor).run();
+        } finally {
+            processor.close();
         }
     }
 

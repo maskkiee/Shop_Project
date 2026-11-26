@@ -11,6 +11,7 @@ import com.example.shop.promo.PromoService;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -22,7 +23,13 @@ import java.util.stream.IntStream;
 import static com.example.shop.support.OrderMapping.toOrderItems;
 import static java.util.Objects.requireNonNull;
 
-public class OrderProcessor {
+/**
+ * Przetwarza koszyk na zamówienie: walidacja, rezerwacja stanu, rabat, generowanie faktury, procesowanie zanówienia.
+ * Rzuca wyjątki OutOfStockException gdy brakuje produktów na stanie, oraz OrderProcessingException gdy koszyk jest pusty.
+ * Metoda process - przetwarza jedno zamówienie naraz, processAsync przetwarza wiele asynchronicznie.
+ * Po sukcesie czyści koszyk.
+ */
+public class OrderProcessor implements AutoCloseable {
 
     private static final String ORDER_PREFIX = "ORD-";
 
@@ -30,7 +37,7 @@ public class OrderProcessor {
     private final OrderRepository repository;
     private final AtomicInteger sequence = new AtomicInteger();
     private final ExecutorService executorService;
-    private PromoService promoService;
+    private final PromoService promoService;
 
     private final List<OrderObserver> observers = new ArrayList<>();
 
@@ -42,10 +49,13 @@ public class OrderProcessor {
         observers.forEach(observer -> observer.onOrderPlaced(order));
     }
 
+    @Override
+    public void close() {
+        executorService.shutdown();
+    }
+
     public OrderProcessor(InvoiceGenerator invoiceGenerator, OrderRepository repository) {
-        this.invoiceGenerator = requireNonNull(invoiceGenerator, "Invoice Generator cannot be null");
-        this.repository = requireNonNull(repository, "Repository cannot be null");
-        this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        this(invoiceGenerator, repository, new PromoService());
     }
 
     public OrderProcessor(InvoiceGenerator invoiceGenerator, OrderRepository repository, PromoService promoService) {
@@ -69,8 +79,6 @@ public class OrderProcessor {
         if (cart.isEmpty()) {
             throw new OrderProcessingException("Cart is empty");
         }
-        reserveStock(cart);
-        emulateExternalWork();
         Order order = Order.builder()
                 .id(nextId())
                 .customer(customer)
@@ -78,6 +86,8 @@ public class OrderProcessor {
                 .total(total)
                 .createdAt(OffsetDateTime.now(Order.SHOP_ZONE))
                 .build();
+        reserveStock(cart);
+        emulateExternalWork();
         repository.save(order, invoiceGenerator.generate(order));
         notifyObservers(order);
         cart.clear();
@@ -92,6 +102,11 @@ public class OrderProcessor {
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
     }
 
+    public void processSync(List<Cart> carts, List<Customer> customers) {
+        IntStream.range(0, carts.size())
+                .forEach(i -> process(carts.get(i), customers.get(i)));
+    }
+
     private void ensureAvailable(CartItem item) {
         Product product = item.getProduct();
         if (product.getStock() < item.getQuantity()) {
@@ -99,7 +114,7 @@ public class OrderProcessor {
         }
     }
 
-    private void reserveStock(Cart cart) {
+    private synchronized void reserveStock(Cart cart) {
         cart.getItems().forEach(this::ensureAvailable);
         cart.getItems().forEach(item -> item.getProduct().reduceStock(item.getQuantity()));
     }
@@ -113,6 +128,8 @@ public class OrderProcessor {
     }
 
     private String nextId() {
-        return ORDER_PREFIX + String.format("%03d", sequence.incrementAndGet());
+        String time = OffsetDateTime.now(Order.SHOP_ZONE)
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+        return ORDER_PREFIX + time + "-" + String.format("%03d", sequence.incrementAndGet());
     }
 }

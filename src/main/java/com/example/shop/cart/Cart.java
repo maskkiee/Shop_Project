@@ -9,6 +9,11 @@ import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Przetwarza koszyk: dodanie przedmiotu do koszyka, liczenie ceny.
+ * Rzuca wyjątki IllegalArgumentException gdy podano niewłaściwą ilość.
+ * addItem zapisuje produkt do koszyka, getTotal zlicza wartość całego koszyka.
+ */
 public class Cart {
 
     private final List<CartItem> items = new ArrayList<>();

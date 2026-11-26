@@ -32,9 +32,7 @@ public class OrderProcessorAsyncTest {
         List<Customer> asyncCustomers = generateCustomers();
 
         long syncStart = System.nanoTime();
-        for (int i = 0; i < ORDER_COUNT; i++) {
-            processor.process(syncCarts.get(i), syncCustomers.get(i));
-        }
+        processor.processSync(syncCarts, syncCustomers);
         long syncMs = (System.nanoTime() - syncStart) / 1_000_000;
         int syncSaved = repository.findAll().size();
 

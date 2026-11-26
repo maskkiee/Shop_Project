@@ -1,9 +1,14 @@
 package com.example.shop.promo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Rejestr kodów rabatowych. Rabat podawany jako ułamek: 0.1 = 10%.
+ * Nieznany lub pusty kod to pełna cena.
+ */
 public class PromoService {
 
     private static final BigDecimal FULL_PRICE = BigDecimal.ONE;
@@ -27,6 +32,6 @@ public class PromoService {
             return total;
         }
         BigDecimal discount = promos.getOrDefault(code.toUpperCase(), NO_DISCOUNT);
-        return total.multiply(FULL_PRICE.subtract(discount));
+        return total.multiply(FULL_PRICE.subtract(discount)).setScale(2, RoundingMode.HALF_UP);
     }
 }
